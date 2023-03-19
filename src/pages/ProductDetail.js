@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useParams} from 'react-router-dom';
 import { AiOutlineMinus, AiOutlinePlus, AiFillStar, AiOutlineStar } from 'react-icons/ai';
 
@@ -7,12 +7,12 @@ import {useStateContext} from '../context/StateContext'
 import Product from '../components/Product'
 
 const ProductDetail = () => {
-
   const productSlug = useParams();
   const [product, setProduct] = useState(null);
   const [products, setproducts] = useState([])
   const [index, setIndex] = useState(0);
   const {incQty, decQty, qty, onAdd, setShowCart} = useStateContext();
+  const main = useRef(null)
 
   const handleBuyNow = () =>{
     onAdd(product, qty);
@@ -37,14 +37,16 @@ const ProductDetail = () => {
           console.log(error);
       })
   };
+  const executeScroll = () => main.current.scrollIntoView();
 
   
   useEffect(() => {
     fetchDetailProduct();
+    executeScroll();
   }, [productSlug]);
       
   return (
-    <div>
+    <div ref={main}>
       <div className="product-detail-container">
         {product && (
           <div>
